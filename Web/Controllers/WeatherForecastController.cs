@@ -1,33 +1,29 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Domain;
 
 namespace Web.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class WeatherForecastController : ControllerBase
+public class CalculateController : ControllerBase
 {
     private static readonly string[] Summaries = new[]
     {
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
     };
 
-    private readonly ILogger<WeatherForecastController> _logger;
+    private readonly ILogger<CalculateController> _logger;
 
-    public WeatherForecastController(ILogger<WeatherForecastController> logger)
+    public CalculateController(ILogger<CalculateController> logger)
     {
         _logger = logger;
     }
 
-    [HttpGet(Name = "GetWeatherForecast")]
-    public IEnumerable<WeatherForecast> Get()
+    [HttpGet(Name = "Add/{left}/{right}")]
+    public int Get(int left, int right)
     {
-        return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-        {
-            Date = DateTime.Now.AddDays(index),
-            TemperatureC = Random.Shared.Next(-20, 55),
-            Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-        })
-        .ToArray();
+        var calculator = new Calculator();
+        return calculator.Sum(left, right);
     }
 }
 
